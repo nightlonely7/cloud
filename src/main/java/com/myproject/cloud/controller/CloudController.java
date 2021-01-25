@@ -41,10 +41,10 @@ public class CloudController {
         censorModel.setCensorEntities(cloudService.getAllCensor(pageable));
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(0);
-        baseResponse.setMessage("censor create success.");
+        baseResponse.setMessage("get all success.");
         CensorResponse dataResponse = new CensorResponse();
         dataResponse.setListCensor(censorModel.getCensorEntities());
         baseResponse.setData(dataResponse);
-        return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 }

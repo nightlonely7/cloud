@@ -7,6 +7,5 @@ public class CensorRequest {
 
     private String censorId;
     private String censorValue;
-    private long measureTime;
-    private String userId;
+    private Long measureTime;
 }

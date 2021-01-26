@@ -30,7 +30,7 @@ public class SensorDataController {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(0);
         baseResponse.setMessage("censor create success.");
-        DataResponse dataResponse = new CensorResponse().of(sensorDataModel.getCensorId());
+        DataResponse dataResponse = new CensorResponse();
         baseResponse.setData(dataResponse);
         return ResponseEntity.created(new URI("/censorData")).body(baseResponse);
     }

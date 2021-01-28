@@ -1,6 +1,6 @@
-package com.myproject.cloud.domain.service.impl;
+package com.myproject.cloud.service.impl;
 
-import com.myproject.cloud.domain.service.ExecutionHistoryService;
+import com.myproject.cloud.service.ExecutionHistoryService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package com.myproject.cloud.domain.entity;
+package com.myproject.cloud.entity;
 
 import lombok.Data;
 

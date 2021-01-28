@@ -1,4 +1,4 @@
-package com.myproject.cloud.domain.entity;
+package com.myproject.cloud.entity;
 
 import com.myproject.cloud.domain.model.SensorDataModel;
 import lombok.Data;
@@ -24,15 +24,15 @@ public class SensorDataEntity {
     private String sensorValue;
 
     @Column(name = "measure_time")
-    private Long measureTime;
+    private LocalDateTime measureTime;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
     public SensorDataEntity ofCreated(SensorDataModel sensorDataModel) {
 
-        this.sensorId = sensorDataModel.getCensorId();
-        this.sensorValue = sensorDataModel.getCensorValue();
+        this.sensorId = sensorDataModel.getSensorId();
+        this.sensorValue = sensorDataModel.getSensorValue();
         this.measureTime = sensorDataModel.getMeasureTime();
         this.createdTime = LocalDateTime.now();
         return this;

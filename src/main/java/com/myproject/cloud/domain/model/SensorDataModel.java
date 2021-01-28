@@ -1,26 +1,28 @@
 package com.myproject.cloud.domain.model;
 
-import com.myproject.cloud.domain.entity.SensorDataEntity;
-import com.myproject.cloud.request.CensorRequest;
+import com.myproject.cloud.entity.SensorDataEntity;
+import com.myproject.cloud.request.SensorDataCreateRequest;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class SensorDataModel {
 
-    private String censorId;
-    private String censorValue;
-    private long measureTime;
+    private String sensorId;
+    private String sensorValue;
+    private LocalDateTime measureTime;
 
-    public SensorDataModel of(CensorRequest censorRequest) {
-        this.censorId = censorRequest.getCensorId();
-        this.censorValue = censorRequest.getCensorValue();
-        this.measureTime = censorRequest.getMeasureTime();
+    public SensorDataModel of(SensorDataCreateRequest sensorDataCreateRequest) {
+        this.sensorId = sensorDataCreateRequest.getSensorId();
+        this.sensorValue = sensorDataCreateRequest.getSensorValue();
+        this.measureTime = sensorDataCreateRequest.getMeasureTime();
         return this;
     }
 
     public SensorDataModel of(SensorDataEntity sensorDataEntity) {
-        this.censorId = sensorDataEntity.getSensorId();
-        this.censorValue = sensorDataEntity.getSensorValue();
+        this.sensorId = sensorDataEntity.getSensorId();
+        this.sensorValue = sensorDataEntity.getSensorValue();
         this.measureTime = sensorDataEntity.getMeasureTime();
         return this;
     }

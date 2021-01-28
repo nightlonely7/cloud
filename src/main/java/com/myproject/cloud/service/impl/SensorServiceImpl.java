@@ -1,8 +1,8 @@
-package com.myproject.cloud.domain.service.impl;
+package com.myproject.cloud.service.impl;
 
 import com.myproject.cloud.domain.model.SensorModel;
-import com.myproject.cloud.domain.repository.SensorRepository;
-import com.myproject.cloud.domain.service.SensorService;
+import com.myproject.cloud.repository.SensorRepository;
+import com.myproject.cloud.service.SensorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +27,16 @@ public class SensorServiceImpl implements SensorService {
                     return sensorModel;
                 }
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public SensorModel createSensor(SensorModel sensorModel) {
+
+        return null;
+    }
+
+    @Override
+    public SensorModel updateSensor(SensorModel sensorModel) {
+        return null;
     }
 }

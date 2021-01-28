@@ -1,12 +1,13 @@
 package com.myproject.cloud.controller;
 
 import com.myproject.cloud.domain.model.SensorAutomationModel;
-import com.myproject.cloud.domain.service.SensorAutomationService;
+import com.myproject.cloud.response.SensorAutomationCreateResponse;
+import com.myproject.cloud.service.SensorAutomationService;
 import com.myproject.cloud.request.SensorAutomationCreateRequest;
 import com.myproject.cloud.request.SensorAutomationUpdateRequest;
 import com.myproject.cloud.response.BaseResponse;
 import com.myproject.cloud.response.SensorAutomationBasicResponse;
-import com.myproject.cloud.response.SensorAutomationDataResponse;
+import com.myproject.cloud.response.SensorAutomationGetAllResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/censorAutomation")
+@RequestMapping(value = "/sensorAutomation")
 @RequiredArgsConstructor
 public class SensorAutomationController {
     private final SensorAutomationService sensorAutomationService;
@@ -25,68 +27,85 @@ public class SensorAutomationController {
     public ResponseEntity<BaseResponse> getAllCensorAutomation() {
 
         List<SensorAutomationModel> sensorAutomationModelList = sensorAutomationService.getAll();
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setCode(0);
-        baseResponse.setMessage("get all sensor automation success.");
-        SensorAutomationDataResponse sensorAutomationDataResponse = new SensorAutomationDataResponse();
-        sensorAutomationDataResponse.setSensorAutomationModelList(sensorAutomationModelList);
-        baseResponse.setData(sensorAutomationDataResponse);
-        return ResponseEntity.ok(baseResponse);
+
+        SensorAutomationGetAllResponse sensorAutomationGetAllResponse = new SensorAutomationGetAllResponse();
+        sensorAutomationGetAllResponse.setCode(0);
+        sensorAutomationGetAllResponse.setMessage("get all sensor automation success.");
+        sensorAutomationGetAllResponse.setData(sensorAutomationModelList.stream().map(sensorAutomationModel -> {
+            SensorAutomationBasicResponse sensorAutomationBasicResponse = new SensorAutomationBasicResponse();
+            sensorAutomationBasicResponse.setSensorId(sensorAutomationModel.getSensorId());
+            sensorAutomationBasicResponse.setSensorAutomationId(sensorAutomationModel.getSensorAutomationId());
+            sensorAutomationBasicResponse.setSensorAutomationName(sensorAutomationModel.getSensorAutomationName());
+            sensorAutomationBasicResponse.setMinHumidity(sensorAutomationModel.getMinHumidity());
+            sensorAutomationBasicResponse.setMaxHumidity(sensorAutomationModel.getMaxHumidity());
+            sensorAutomationBasicResponse.setMinPeriod(sensorAutomationModel.getMinPeriod());
+            sensorAutomationBasicResponse.setMaxPeriod(sensorAutomationModel.getMaxPeriod());
+            sensorAutomationBasicResponse.setAutomationEnabled(sensorAutomationModel.getAutomationEnabled());
+            sensorAutomationBasicResponse.setApplied(sensorAutomationModel.getApplied());
+            return sensorAutomationBasicResponse;
+        }).collect(Collectors.toList()));
+        return ResponseEntity.ok(sensorAutomationGetAllResponse);
     }
 
     @PostMapping
     public ResponseEntity<BaseResponse> createSensorAutomation(@RequestBody SensorAutomationCreateRequest sensorAutomationCreateRequest) throws URISyntaxException {
 //        sensorDataService.validateSensorRequest(censorRequest);
         SensorAutomationModel sensorAutomationModel = new SensorAutomationModel();
-        sensorAutomationModel.setSensorId("SENSOR_" + System.currentTimeMillis());
+        sensorAutomationModel.setSensorId(sensorAutomationCreateRequest.getSensorId());
+        sensorAutomationModel.setSensorAutomationId("SENSOR_" + System.currentTimeMillis());
+        sensorAutomationModel.setSensorAutomationName(sensorAutomationCreateRequest.getSensorAutomationName());
         sensorAutomationModel.setMinHumidity(sensorAutomationCreateRequest.getMinHumidity());
         sensorAutomationModel.setMaxHumidity(sensorAutomationCreateRequest.getMaxHumidity());
         sensorAutomationModel.setMinPeriod(sensorAutomationCreateRequest.getMinPeriod());
         sensorAutomationModel.setMaxPeriod(sensorAutomationCreateRequest.getMaxPeriod());
         sensorAutomationModel.setAutomationEnabled(sensorAutomationCreateRequest.getAutomationEnabled());
-        sensorAutomationModel.setApplied(Boolean.FALSE);
+        sensorAutomationModel.setApplied(sensorAutomationCreateRequest.getApplied());
         sensorAutomationService.create(sensorAutomationModel);
 
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setCode(0);
-        baseResponse.setMessage("sensor automation create success.");
-        SensorAutomationBasicResponse dataResponse = new SensorAutomationBasicResponse();
-        dataResponse.setSensorId(sensorAutomationModel.getSensorId());
-        dataResponse.setMinHumidity(sensorAutomationModel.getMinHumidity());
-        dataResponse.setMaxHumidity(sensorAutomationModel.getMaxHumidity());
-        dataResponse.setMinPeriod(sensorAutomationModel.getMinPeriod());
-        dataResponse.setMaxPeriod(sensorAutomationModel.getMaxPeriod());
-        dataResponse.setAutomationEnabled(sensorAutomationModel.getAutomationEnabled());
-        dataResponse.setApplied(Boolean.FALSE);
-        baseResponse.setData(dataResponse);
-        return ResponseEntity.created(new URI("/censorAutomation/" + sensorAutomationModel.getSensorId())).body(baseResponse);
+        SensorAutomationCreateResponse sensorAutomationCreateResponse = new SensorAutomationCreateResponse();
+        sensorAutomationCreateResponse.setCode(0);
+        sensorAutomationCreateResponse.setMessage("sensor automation create success.");
+        SensorAutomationBasicResponse sensorAutomationBasicResponse = new SensorAutomationBasicResponse();
+        sensorAutomationBasicResponse.setSensorId(sensorAutomationModel.getSensorId());
+        sensorAutomationBasicResponse.setSensorAutomationId(sensorAutomationModel.getSensorAutomationId());
+        sensorAutomationBasicResponse.setSensorAutomationName(sensorAutomationModel.getSensorAutomationName());
+        sensorAutomationBasicResponse.setMinHumidity(sensorAutomationModel.getMinHumidity());
+        sensorAutomationBasicResponse.setMaxHumidity(sensorAutomationModel.getMaxHumidity());
+        sensorAutomationBasicResponse.setMinPeriod(sensorAutomationModel.getMinPeriod());
+        sensorAutomationBasicResponse.setMaxPeriod(sensorAutomationModel.getMaxPeriod());
+        sensorAutomationBasicResponse.setAutomationEnabled(sensorAutomationModel.getAutomationEnabled());
+        sensorAutomationBasicResponse.setApplied(sensorAutomationModel.getApplied());
+        sensorAutomationCreateResponse.setData(sensorAutomationBasicResponse);
+        return ResponseEntity.created(new URI("/censorAutomation/" + sensorAutomationModel.getSensorId())).body(sensorAutomationCreateResponse);
     }
 
-    @PutMapping("/{sensorId}")
-    public ResponseEntity<BaseResponse> updateSensorAutomation(@RequestBody SensorAutomationUpdateRequest sensorAutomationUpdateRequest, @PathVariable("sensorId") String sensorId) throws URISyntaxException {
+    @PutMapping("/{sensorAutomationId}")
+    public ResponseEntity<BaseResponse> updateSensorAutomation(@RequestBody SensorAutomationUpdateRequest sensorAutomationUpdateRequest, @PathVariable("sensorAutomationId") String sensorAutomationId) throws URISyntaxException {
 //        sensorDataService.validateSensorRequest(censorRequest);
-        SensorAutomationModel sensorAutomationModel = new SensorAutomationModel();
-        sensorAutomationModel.setSensorId(sensorId);
+
+        SensorAutomationModel sensorAutomationModel = sensorAutomationService.findBySensorAutomationId(sensorAutomationId);
         sensorAutomationModel.setMinHumidity(sensorAutomationUpdateRequest.getMinHumidity());
         sensorAutomationModel.setMaxHumidity(sensorAutomationUpdateRequest.getMaxHumidity());
         sensorAutomationModel.setMinPeriod(sensorAutomationUpdateRequest.getMinPeriod());
         sensorAutomationModel.setMaxPeriod(sensorAutomationUpdateRequest.getMaxPeriod());
         sensorAutomationModel.setAutomationEnabled(sensorAutomationUpdateRequest.getAutomationEnabled());
-        sensorAutomationModel.setApplied(Boolean.FALSE);
+        sensorAutomationModel.setApplied(sensorAutomationUpdateRequest.getApplied());
         sensorAutomationService.update(sensorAutomationModel);
 
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setCode(0);
-        baseResponse.setMessage("sensor automation update success.");
-        SensorAutomationBasicResponse dataResponse = new SensorAutomationBasicResponse();
-        dataResponse.setSensorId(sensorAutomationModel.getSensorId());
-        dataResponse.setMinHumidity(sensorAutomationModel.getMinHumidity());
-        dataResponse.setMaxHumidity(sensorAutomationModel.getMaxHumidity());
-        dataResponse.setMinPeriod(sensorAutomationModel.getMinPeriod());
-        dataResponse.setMaxPeriod(sensorAutomationModel.getMaxPeriod());
-        dataResponse.setAutomationEnabled(sensorAutomationModel.getAutomationEnabled());
-        dataResponse.setApplied(Boolean.FALSE);
-        baseResponse.setData(dataResponse);
-        return ResponseEntity.ok(baseResponse);
+        SensorAutomationCreateResponse sensorAutomationCreateResponse = new SensorAutomationCreateResponse();
+        sensorAutomationCreateResponse.setCode(0);
+        sensorAutomationCreateResponse.setMessage("sensor automation update success.");
+        SensorAutomationBasicResponse sensorAutomationBasicResponse = new SensorAutomationBasicResponse();
+        sensorAutomationBasicResponse.setSensorId(sensorAutomationModel.getSensorId());
+        sensorAutomationBasicResponse.setSensorAutomationId(sensorAutomationModel.getSensorAutomationId());
+        sensorAutomationBasicResponse.setSensorAutomationName(sensorAutomationModel.getSensorAutomationName());
+        sensorAutomationBasicResponse.setMinHumidity(sensorAutomationModel.getMinHumidity());
+        sensorAutomationBasicResponse.setMaxHumidity(sensorAutomationModel.getMaxHumidity());
+        sensorAutomationBasicResponse.setMinPeriod(sensorAutomationModel.getMinPeriod());
+        sensorAutomationBasicResponse.setMaxPeriod(sensorAutomationModel.getMaxPeriod());
+        sensorAutomationBasicResponse.setAutomationEnabled(sensorAutomationModel.getAutomationEnabled());
+        sensorAutomationBasicResponse.setApplied(sensorAutomationModel.getApplied());
+        sensorAutomationCreateResponse.setData(sensorAutomationBasicResponse);
+        return ResponseEntity.ok(sensorAutomationCreateResponse);
     }
 }

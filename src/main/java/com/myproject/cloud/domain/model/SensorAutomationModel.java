@@ -6,6 +6,8 @@ import lombok.Data;
 public class SensorAutomationModel {
 
     private String sensorId;
+    private String sensorAutomationId;
+    private String sensorAutomationName;
     private Integer maxHumidity;
     private Integer minHumidity;
     private Integer minPeriod;

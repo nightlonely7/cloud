@@ -1,4 +1,4 @@
-package com.myproject.cloud.domain.service;
+package com.myproject.cloud.service;
 
 public interface ExecutionHistoryService {
 }

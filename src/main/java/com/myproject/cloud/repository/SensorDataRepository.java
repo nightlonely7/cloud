@@ -1,6 +1,6 @@
-package com.myproject.cloud.domain.repository;
+package com.myproject.cloud.repository;
 
-import com.myproject.cloud.domain.entity.SensorDataEntity;
+import com.myproject.cloud.entity.SensorDataEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.myproject.cloud.domain.entity;
+package com.myproject.cloud.entity;
 
 import lombok.Data;
 
@@ -18,6 +18,12 @@ public class SensorAutomationEntity {
 
     @Column(name = "sensor_id")
     private String sensorId;
+
+    @Column(name = "sensor_automation_id")
+    private String sensorAutomationId;
+
+    @Column(name = "sensor_automation_name")
+    private String sensorAutomationName;
 
     @Column(name = "max_humidity")
     private Integer maxHumidity;

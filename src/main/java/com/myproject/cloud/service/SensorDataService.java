@@ -12,5 +12,6 @@ public interface SensorDataService {
     SensorDataModel saveSensorData(SensorDataModel sensorDataModel);
 
     List<SensorDataModel> getAllSensorData();
+    List<SensorDataModel> getAllSensorDataBySensorId(String sensorId);
 
 }

@@ -8,8 +8,8 @@ public class SensorAutomationBasicResponse implements DataResponse {
     private String sensorId;
     private String sensorAutomationId;
     private String sensorAutomationName;
-    private Integer maxHumidity;
     private Integer minHumidity;
+    private Integer maxHumidity;
     private Integer minPeriod;
     private Integer maxPeriod;
     private Boolean automationEnabled;

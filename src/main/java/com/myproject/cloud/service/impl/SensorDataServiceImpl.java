@@ -38,6 +38,11 @@ public class SensorDataServiceImpl implements SensorDataService {
 
     @Override
     public List<SensorDataModel> getAllSensorData() {
-        return sensorDataRepository.findAll().stream().map(sensorEntity -> new SensorDataModel().of(sensorEntity)).collect(Collectors.toList());
+        return sensorDataRepository.findAllByOrderByCreatedTimeDesc().stream().map(sensorEntity -> new SensorDataModel().of(sensorEntity)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SensorDataModel> getAllSensorDataBySensorId(String sensorId) {
+        return sensorDataRepository.findAllByOrderByCreatedTimeDesc().stream().map(sensorEntity -> new SensorDataModel().of(sensorEntity)).collect(Collectors.toList());
     }
 }

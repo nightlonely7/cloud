@@ -36,8 +36,6 @@ public class ExecutionServiceImpl implements ExecutionService {
     public ExecutionModel update(ExecutionModel executionModel) {
         ExecutionEntity executionEntity = executionRepository.findByExecutionId(executionModel.getExecutionId())
                 .orElseThrow(() -> new IllegalArgumentException("executionId '" + executionModel.getExecutionId() + "' not found."));
-        executionEntity.setCurrentHumidity(executionModel.getCurrentHumidity());
-        executionEntity.setTargetHumidity(executionModel.getTargetHumidity());
         executionEntity.setExecutionTime(executionModel.getExecutionTime());
         executionEntity.setExecuted(executionModel.getExecuted());
         executionEntity.setLastModifiedTime(LocalDateTime.now());

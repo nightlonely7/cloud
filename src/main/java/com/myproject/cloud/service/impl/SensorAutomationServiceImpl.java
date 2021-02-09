@@ -1,13 +1,22 @@
 package com.myproject.cloud.service.impl;
 
+import com.myproject.cloud.domain.model.ExecutionModel;
+import com.myproject.cloud.domain.model.SensorDataModel;
+import com.myproject.cloud.entity.ExecutionEntity;
 import com.myproject.cloud.entity.SensorAutomationEntity;
 import com.myproject.cloud.domain.model.SensorAutomationModel;
+import com.myproject.cloud.repository.ExecutionRepository;
 import com.myproject.cloud.repository.SensorAutomationRepository;
+import com.myproject.cloud.repository.SensorDataRepository;
+import com.myproject.cloud.service.ExecutionService;
 import com.myproject.cloud.service.SensorAutomationService;
+import com.myproject.cloud.service.SensorDataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +25,8 @@ import java.util.List;
 public class SensorAutomationServiceImpl implements SensorAutomationService {
 
     private final SensorAutomationRepository sensorAutomationRepository;
+    private final SensorDataService sensorDataService;
+    private final ExecutionService executionService;
 
     @Override
     public SensorAutomationModel findBySensorAutomationId(String sensorAutomationId) {
@@ -90,5 +101,33 @@ public class SensorAutomationServiceImpl implements SensorAutomationService {
         });
 
         return sensorAutomationModelList;
+    }
+
+    @Scheduled(initialDelay = 10000, fixedRate = 30000)
+    public void automate() {
+        System.out.println("automate");
+        List<SensorDataModel> sensorDataList = sensorDataService.getAllSensorData();
+        List<ExecutionModel> executionList = executionService.findAllExecution();
+        List<SensorAutomationModel> sensorAutomationList = getAll();
+        sensorAutomationList.forEach(sensorAutomation -> {
+            if (sensorAutomation.getAutomationEnabled()) {
+                Integer currentHumidity = Integer.MAX_VALUE;
+                if (!sensorDataList.isEmpty()) {
+                    currentHumidity = Integer.parseInt(sensorDataList.get(0).getSensorValue());
+                }
+                if (sensorAutomation.getMinHumidity() >= currentHumidity
+                        && executionList.stream().allMatch(ExecutionModel::getExecuted)) {
+                    ExecutionModel executionModel = new ExecutionModel();
+                    executionModel.setExecutionId("EXECUTION_" + System.currentTimeMillis());
+                    executionModel.setSensorId("1");
+                    executionModel.setCurrentHumidity(currentHumidity);
+                    executionModel.setTargetHumidity(sensorAutomation.getMaxHumidity());
+                    executionModel.setRequestTime(LocalDateTime.now());
+                    executionModel.setExecuted(Boolean.FALSE);
+                    executionService.create(executionModel);
+                    System.out.println("created execution from automation");
+                }
+            }
+        });
     }
 }

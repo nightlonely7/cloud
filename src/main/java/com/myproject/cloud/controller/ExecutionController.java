@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class ExecutionController {
 
     private final ExecutionService executionService;
-    private final SensorDataService sensorDataService;
 
     @PostMapping
     public ResponseEntity<BaseResponse> createExecution(@RequestBody ExecutionCreateRequest executionCreateRequest) {
@@ -47,7 +46,6 @@ public class ExecutionController {
     public ResponseEntity<BaseResponse> updateExecution(@RequestBody ExecutionUpdateRequest executionCreateRequest,
                                                         @PathVariable("executionId") String executionId) {
 
-        System.out.println("execution updated");
         ExecutionModel executionModel = new ExecutionModel();
         executionModel.setExecutionId(executionId);
         executionModel.setExecutionTime(executionCreateRequest.getExecutionTime());
